@@ -1,0 +1,15 @@
+{
+  "name": "pokemon-translator",
+  "version": "1.0.0",
+  "description": "A Bot that translates pokemon names",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wissididom",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.3.0",
+    "dotenv": "^10.0.0"
+  }
+}
