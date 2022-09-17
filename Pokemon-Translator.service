@@ -1,0 +1,14 @@
+[Unit]
+Description=Discord-Pokemon-Translator-Bot
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+WorkingDirectory=/root/Pokemon-Translator
+ExecStart=node index.js
+
+[Install]
+WantedBy=multi-user.target
