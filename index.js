@@ -133,7 +133,7 @@ bot.on('interactionCreate', async (interaction) => {
 		switch (interaction.commandName) {
 			case 'uebersetzen':
 			case 'translate':
-				await interaction.deferReply();
+				await interaction.deferReply({ ephemeral: true );
 				let name = interaction.options.getString('pokemon');
 				let target = interaction.options.getString('target') || '9'; // 9 = English
 				name = name.replace('  ', ' ').replace(':female_sign:', '♀️').replace(' ♀️', '♀').replace('♀️', '♀');
