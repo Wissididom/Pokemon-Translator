@@ -9,7 +9,8 @@ bot.on('ready', async () => {
 			name: 'pokemon',
 			description: 'The pokemon to translate',
 			required: true,
-			type: ApplicationCommandOptionType.String
+			type: ApplicationCommandOptionType.String,
+			autocomplete: true
 		},
 		{
 			name: 'target',
@@ -69,7 +70,7 @@ bot.on('ready', async () => {
 	await bot.application?.commands?.create({
 		name: 'translate',
 		description: 'Translates the Name of a pokemon into english',
-		type: ApplicationCommandType.ChatInput
+		type: ApplicationCommandType.ChatInput,
 		options: options
 	});
 	process.kill(process.pid, 'SIGTERM');

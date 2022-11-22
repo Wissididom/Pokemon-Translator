@@ -1,9 +1,34 @@
 // TODO: Load the pokemon species names from github by using csv2json
 require('dotenv').config();
 const { Client, GatewayIntentBits, Partials, InteractionType } = require('discord.js');
-const pokemons = require('./pokemon_species_names.json');
+const csv2json = require('csvtojson');
+//const pokemons = require('./pokemon_species_names.json');
 const bot = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.MessageContent], partials: [Partials.User, Partials.Channel, Partials.GuildMember, Partials.Message, Partials.Reaction]});
 const token = process.env['TOKEN'];
+
+let lastPokemons = Date.now();
+
+async function getPokemonNames() {
+	if (!pokemons || Date.now() - lastPokemons > 1000 * 60 * 60 * 24) { // Older than a day
+		lastPokemons = Date.now();
+		// https://github.com/veekun/pokedex/blob/master/pokedex/data/csv/language_names.csv
+		// https://github.com/PokeAPI/pokeapi/blob/master/data/v2/csv/pokemon_species_names.csv
+		return await csv2json().fromString(await fetch('https://github.com/PokeAPI/pokeapi/raw/master/data/v2/csv/pokemon_species_names.csv').then(async res => {
+			if (res.ok)
+				return await res.text();
+			else
+				return undefined;
+		}).catch(err => console.error(`Error fetching Pokemon names: ${err}`)));
+	} else {
+		return pokemons;
+	}
+}
+
+let pokemons;
+
+(async function() {
+	pokemons = await getPokemonNames();
+})();
 
 function getResponse(name, target = 9/*English*/) {
 	let pokemonFound = false;
@@ -84,26 +109,40 @@ function getResponse(name, target = 9/*English*/) {
 	return reply;
 }
 
+function getAutocompleteResponse(entered) {
+	let pokemonList = [];
+	for (let i = 0; i < pokemons.length; i++) {
+		if (pokemonList.length < 25 && pokemons[i].name.toLowerCase().indexOf(entered.toLowerCase()) > -1 && !pokemonList.map(x => x.name).includes(pokemons[i].name)) {
+			pokemonList.push({
+				name: pokemons[i].name,
+				value: pokemons[i].name
+			});
+		}
+	}
+	return pokemonList;
+}
+
 bot.on('ready', () => {
 	console.log(`Logged in as ${bot.user.tag}!`);
 });
 bot.on('interactionCreate', async (interaction) => {
-	if (!interaction.type === InteractionType.ApplicationCommand)
-		return;
-	const { commandName, options } = interaction;
-	switch (commandName) {
-		case 'uebersetzen':
-		case 'translate':
-			let name = options.getString('pokemon');
-			let target = options.getString('target') || '9'; // 9 = English
-			// console.log(`interactionCreate:${name}`);
-			name = name.replace('  ', ' ').replace(':female_sign:', '♀️').replace(' ♀️', '♀').replace('♀️', '♀');
-			name = name.replace('  ', ' ').replace(':male_sign:', '♂️').replace(' ♂️', '♂').replace('♂️', '♂');
-			let pokemonFound = false;
-			interaction.reply({
-				content: getResponse(name, target),
-				ephemeral: true
-			});
+	if (interaction.isAutocomplete()) {
+		await interaction.respond(getAutocompleteResponse(interaction.options.getFocused()));
+	}
+	if (interaction.isChatInputCommand() || interaction.isCommand()) {
+		switch (interaction.commandName) {
+			case 'uebersetzen':
+			case 'translate':
+				await interaction.deferReply();
+				let name = interaction.options.getString('pokemon');
+				let target = interaction.options.getString('target') || '9'; // 9 = English
+				name = name.replace('  ', ' ').replace(':female_sign:', '♀️').replace(' ♀️', '♀').replace('♀️', '♀');
+				name = name.replace('  ', ' ').replace(':male_sign:', '♂️').replace(' ♂️', '♂').replace('♂️', '♂');
+				await interaction.editReply({
+					content: getResponse(name, target),
+					ephemeral: true
+				});
+		}
 	}
 });
 bot.on('messageCreate', async (message) => {
