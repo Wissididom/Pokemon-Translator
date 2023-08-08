@@ -1,6 +1,9 @@
-require('dotenv').config();
-const { Client, GatewayIntentBits, Partials, InteractionType } = require('discord.js');
-const csv2json = require('csvtojson');
+import * as dotenv from 'dotenv';
+import { Client, GatewayIntentBits, Partials, InteractionType } from 'discord.js';
+import * as csv2json from 'csvtojson';
+
+dotenv.config();
+
 const bot = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.MessageContent], partials: [Partials.User, Partials.Channel, Partials.GuildMember, Partials.Message, Partials.Reaction]});
 const token = process.env['TOKEN'];
 
