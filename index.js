@@ -1,8 +1,6 @@
-// TODO: Load the pokemon species names from github by using csv2json
 require('dotenv').config();
 const { Client, GatewayIntentBits, Partials, InteractionType } = require('discord.js');
 const csv2json = require('csvtojson');
-//const pokemons = require('./pokemon_species_names.json');
 const bot = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.MessageContent], partials: [Partials.User, Partials.Channel, Partials.GuildMember, Partials.Message, Partials.Reaction]});
 const token = process.env['TOKEN'];
 
