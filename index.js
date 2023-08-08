@@ -5,7 +5,7 @@ import {
   Partials,
   InteractionType,
 } from "discord.js";
-import * as csv2json from "csvtojson";
+import csv2json from "csvtojson";
 
 dotenv.config();
 
