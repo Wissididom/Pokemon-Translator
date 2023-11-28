@@ -5,7 +5,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write .",
+    "check-format": "prettier --check ."
   },
   "author": "Wissididom",
   "license": "ISC",
@@ -13,5 +15,8 @@
     "csvtojson": "^2.0.10",
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.1.0"
   }
 }
