@@ -1,4 +1,4 @@
-import * as dotenv from "dotenv";
+import "dotenv/config";
 import {
   Client,
   GatewayIntentBits,
@@ -6,8 +6,6 @@ import {
   InteractionType,
 } from "discord.js";
 import csv2json from "csvtojson";
-
-dotenv.config();
 
 const bot = new Client({
   intents: [
