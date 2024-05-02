@@ -22,7 +22,6 @@ const bot = new Client({
     Partials.Reaction,
   ],
 });
-const token = process.env["TOKEN"];
 
 let lastPokemons = Date.now();
 
@@ -216,4 +215,4 @@ bot.on("messageCreate", async (message) => {
         .catch(console.error);
   }
 });
-bot.login(token);
+bot.login(process.env.TOKEN);
