@@ -1,6 +1,7 @@
 import "dotenv/config";
 import {
   Client,
+  Events,
   GatewayIntentBits,
   Partials,
   InteractionType,
@@ -8,12 +9,7 @@ import {
 import csv2json from "csvtojson";
 
 const bot = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.DirectMessages,
-    GatewayIntentBits.MessageContent,
-  ],
+  intents: [GatewayIntentBits.Guilds],
   partials: [
     Partials.User,
     Partials.Channel,
@@ -150,10 +146,10 @@ function getAutocompleteResponse(entered) {
   return pokemonList;
 }
 
-bot.on("ready", () => {
+bot.on(Events.ClientReady, () => {
   console.log(`Logged in as ${bot.user.tag}!`);
 });
-bot.on("interactionCreate", async (interaction) => {
+bot.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isAutocomplete()) {
     await interaction.respond(
       getAutocompleteResponse(interaction.options.getFocused()),
@@ -183,36 +179,5 @@ bot.on("interactionCreate", async (interaction) => {
     }
   }
 });
-bot.on("messageCreate", async (message) => {
-  if (message.author.bot) return; // Don't read  messages from bots
-  if (
-    message.content.startsWith("!übersetzen") ||
-    message.content.startsWith("!uebersetzen") ||
-    message.content.startsWith("!translate")
-  ) {
-    let name = message.content
-      .substring(message.content.indexOf(" ") + 1)
-      .trim();
-    name = name
-      .replace("  ", " ")
-      .replace(":female_sign:", "♀️")
-      .replace(" ♀️", "♀")
-      .replace("♀️", "♀");
-    message.author
-      .send(getResponse(name))
-      .then((message) => console.log("Pokemon Name sent successfully!"))
-      .catch((e) => {
-        console.error(e);
-        message.channel
-          .send(`<@!${message.author.id}> DM could not be delivered!`)
-          .then((message) => console.log("Error message sent successfully!"))
-          .catch(console.error);
-      });
-    if (message.guild)
-      message
-        .delete()
-        .then((message) => console.log("Message successfully deleted!"))
-        .catch(console.error);
-  }
-});
+
 bot.login(process.env.TOKEN);
