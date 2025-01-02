@@ -79,6 +79,18 @@ let commands = [
             value: "10",
           },
         ),
+    )
+    .addBooleanOption((option) =>
+      option
+        .setName("public")
+        .setNameLocalizations({
+          de: "oeffentlich",
+        })
+        .setDescription("Whether to have the response visible for others")
+        .setDescriptionLocalizations({
+          de: "Ob die Antwort für andere sichtbar sein soll",
+        })
+        .setRequired(false),
     ),
 ];
 

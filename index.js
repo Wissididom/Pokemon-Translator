@@ -3,6 +3,7 @@ import {
   Client,
   Events,
   GatewayIntentBits,
+  MessageFlags,
   Partials,
   InteractionType,
 } from "discord.js";
@@ -159,7 +160,11 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     switch (interaction.commandName) {
       case "uebersetzen":
       case "translate":
-        await interaction.deferReply({ ephemeral: true });
+        if (interaction.options.getBoolean("public") == true) {
+          await interaction.deferReply();
+        } else {
+          await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+        }
         let name = interaction.options.getString("pokemon");
         let target = interaction.options.getString("target") || "9"; // 9 = English
         name = name
@@ -174,7 +179,6 @@ bot.on(Events.InteractionCreate, async (interaction) => {
           .replace("♂️", "♂");
         await interaction.editReply({
           content: getResponse(name, target),
-          ephemeral: true,
         });
     }
   }
