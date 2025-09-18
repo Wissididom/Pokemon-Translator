@@ -56,7 +56,7 @@ async function getPokemonNames() {
     try {
       // https://github.com/veekun/pokedex/blob/master/pokedex/data/csv/language_names.csv
       // https://github.com/PokeAPI/pokeapi/blob/master/data/v2/csv/pokemon_species_names.csv
-      const res  = await fetch(
+      const res = await fetch(
         "https://github.com/PokeAPI/pokeapi/raw/master/data/v2/csv/pokemon_species_names.csv",
       );
       if (!res.ok) throw new Error("Failed to fetch Pokémon names");
@@ -71,11 +71,13 @@ function getResponse(name, target = "9" /*English*/) {
   const lang = String(target);
   const baseMsg = messages.notFound[lang] || messages.notFound[9];
   const match = pokemons.find(
-    (p) => p.name.toLowerCase() === name.toLowerCase()
+    (p) => p.name.toLowerCase() === name.toLowerCase(),
   );
   if (!match) return baseMsg;
   const translation = pokemnons.find(
-    (p) => p.pokemon_species_id === match.pokemon_species_id && p.local_language_id == lang
+    (p) =>
+      p.pokemon_species_id === match.pokemon_species_id &&
+      p.local_language_id == lang,
   );
   if (!translation) return baseMsg;
   return (messages.found[lang] || messages.found[9])(translation.name);
@@ -108,11 +110,11 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     );
   }
   if (interaction.isChatInputCommand() || interaction.isCommand()) {
-    if (["uebersetzen", "translate"].includes(interaction.commandName) {
+    if (["uebersetzen", "translate"].includes(interaction.commandName)) {
       await interaction.deferReply({
         flags: interaction.options.getBoolean("public")
           ? undefined
-          : MessageFlags.Ephemeral
+          : MessageFlags.Ephemeral,
       });
       const name = normalizeName(interaction.options.getString("pokemon"));
       const target = interaction.options.getString("target") || "9";
