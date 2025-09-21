@@ -74,7 +74,7 @@ function getResponse(name, target = "9" /*English*/) {
     (p) => p.name.toLowerCase() === name.toLowerCase(),
   );
   if (!match) return baseMsg;
-  const translation = pokemnons.find(
+  const translation = pokemons.find(
     (p) =>
       p.pokemon_species_id === match.pokemon_species_id &&
       p.local_language_id == lang,
