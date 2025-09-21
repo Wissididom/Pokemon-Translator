@@ -5,7 +5,6 @@ import {
   GatewayIntentBits,
   MessageFlags,
   Partials,
-  InteractionType,
 } from "discord.js";
 import csv2json from "csvtojson";
 
@@ -20,131 +19,85 @@ const bot = new Client({
   ],
 });
 
-let lastPokemons = Date.now();
+let lastPokemons = 0;
+let pokemons = [];
+
+const messages = {
+  notFound: {
+    1: "あなたのポケモンは見つかりませんでした!",
+    2: "Anata no pokemon wa mitsukarimasendeshita!",
+    3: "당신의 포켓몬을 찾을 수 없습니다!",
+    4: "你的小精灵找不到了！",
+    5: "Ton Pokemon n'a pas pu être trouvé !",
+    6: "Dein Pokemon konnte nicht gefunden werden!",
+    7: "¡Tu Pokemon no ha podido ser encontrado!",
+    8: "Il tuo Pokemon non è stato trovato!",
+    10: "Vašeho Pokémona se nepodařilo najít!",
+    9: "Your Pokemon couldn't be found!", // default
+  },
+  found: {
+    1: (name) => `あなたのポケモンの日本語名は **${name}** です。`,
+    2: (name) => `Anata no pokemon no nihongo-mei wa **${name}** desu.`,
+    3: (name) => `포켓몬의 한국 이름은 **${name}**입니다.`,
+    4: (name) => `你的小精灵的中文名字是**${name}**。`,
+    5: (name) => `Le nom français de votre pokémon est **${name}**.`,
+    6: (name) => `Der deutsche Name deines Pokemons lautet **${name}**.`,
+    7: (name) => `El nombre en español de tu pokemon es **${name}**.`,
+    8: (name) => `Il nome italiano del tuo pokemon è **${name}**.`,
+    10: (name) => `České jméno vašeho pokémona je **${name}**.`,
+    9: (name) => `The english name of your pokemon is **${name}**.`,
+  },
+};
 
 async function getPokemonNames() {
   if (!pokemons || Date.now() - lastPokemons > 1000 * 60 * 60 * 24) {
     // Older than a day
     lastPokemons = Date.now();
-    // https://github.com/veekun/pokedex/blob/master/pokedex/data/csv/language_names.csv
-    // https://github.com/PokeAPI/pokeapi/blob/master/data/v2/csv/pokemon_species_names.csv
-    return await csv2json().fromString(
-      await fetch(
+    try {
+      // https://github.com/veekun/pokedex/blob/master/pokedex/data/csv/language_names.csv
+      // https://github.com/PokeAPI/pokeapi/blob/master/data/v2/csv/pokemon_species_names.csv
+      const res = await fetch(
         "https://github.com/PokeAPI/pokeapi/raw/master/data/v2/csv/pokemon_species_names.csv",
-      )
-        .then(async (res) => {
-          if (res.ok) return await res.text();
-          else return undefined;
-        })
-        .catch((err) => console.error(`Error fetching Pokemon names: ${err}`)),
-    );
-  } else {
-    return pokemons;
+      );
+      if (!res.ok) throw new Error("Failed to fetch Pokémon names");
+      pokemons = await csv2json().fromString(await res.text());
+    } catch (err) {
+      console.error(`Error fetching Pokemon names: ${err}`);
+    }
   }
 }
 
-let pokemons;
-
-(async function () {
-  pokemons = await getPokemonNames();
-})();
-
-function getResponse(name, target = 9 /*English*/) {
-  let pokemonFound = false;
-  let reply = "";
-  switch (target) {
-    case "1":
-      reply = "あなたのポケモンは見つかりませんでした!";
-      break;
-    case "2":
-      reply = "Anata no pokemon wa mitsukarimasendeshita!";
-      break;
-    case "3":
-      reply = "당신의 포켓몬을 찾을 수 없습니다!";
-      break;
-    case "4":
-      reply = "你的小精灵找不到了！";
-      break;
-    case "5":
-      reply = "Ton Pokemon n'a pas pu être trouvé !";
-      break;
-    case "6":
-      reply = "Dein Pokemon konnte nicht gefunden werden!";
-      break;
-    case "7":
-      reply = "¡Tu Pokemon no ha podido ser encontrado!";
-      break;
-    case "8":
-      reply = "Il tuo Pokemon non è stato trovato!";
-    case "10":
-      reply = "Vašeho Pokémona se nepodařilo najít!";
-      break;
-    default: // 9
-      reply = "Your Pokemon couldn't be found!";
-      break;
-  }
-  for (let i = 0; i < pokemons.length; i++) {
-    if (pokemonFound) break;
-    if (pokemons[i].name.toLowerCase() === name.toLowerCase()) {
-      for (let j = 0; j < pokemons.length; j++) {
-        if (
-          pokemons[i].pokemon_species_id == pokemons[j].pokemon_species_id &&
-          pokemons[j].local_language_id == target
-        ) {
-          switch (target) {
-            case "1":
-              reply = `あなたのポケモンの日本語名は **${pokemons[j].name}** です。`;
-              break;
-            case "2":
-              reply = `Anata no pokemon no nihongo-mei wa **${pokemons[j].name}** desu.`;
-              break;
-            case "3":
-              reply = `포켓몬의 한국 이름은 **${pokemons[j].name}**입니다.`;
-              break;
-            case "4":
-              reply = `你的小精灵的中文名字是**${pokemons[j].name}**。`;
-              break;
-            case "5":
-              reply = `Le nom français de votre pokémon est **${pokemons[j].name}**.`;
-              break;
-            case "6":
-              reply = `Der deutsche Name deines Pokemons lautet **${pokemons[j].name}**.`;
-              break;
-            case "7":
-              reply = `El nombre en español de tu pokemon es **${pokemons[j].name}**.`;
-              break;
-            case "8":
-              reply = `Il nome italiano del tuo pokemon è **${pokemons[j].name}**.`;
-              break;
-            case "10":
-              reply = `České jméno vašeho pokémona je **${pokemons[j].name}**.`;
-            default: // 9
-              reply = `The english name of your pokemon is **${pokemons[j].name}**.`;
-              break;
-          }
-          pokemonFound = true;
-        }
-      }
-    }
-  }
-  return reply;
+function getResponse(name, target = "9" /*English*/) {
+  const lang = String(target);
+  const baseMsg = messages.notFound[lang] || messages.notFound[9];
+  const match = pokemons.find(
+    (p) => p.name.toLowerCase() === name.toLowerCase(),
+  );
+  if (!match) return baseMsg;
+  const translation = pokemons.find(
+    (p) =>
+      p.pokemon_species_id === match.pokemon_species_id &&
+      p.local_language_id == lang,
+  );
+  if (!translation) return baseMsg;
+  return (messages.found[lang] || messages.found[9])(translation.name);
 }
 
 function getAutocompleteResponse(entered) {
-  let pokemonList = [];
-  for (let i = 0; i < pokemons.length; i++) {
-    if (
-      pokemonList.length < 25 &&
-      pokemons[i].name.toLowerCase().indexOf(entered.toLowerCase()) > -1 &&
-      !pokemonList.map((x) => x.name).includes(pokemons[i].name)
-    ) {
-      pokemonList.push({
-        name: pokemons[i].name,
-        value: pokemons[i].name,
-      });
-    }
-  }
-  return pokemonList;
+  const lower = entered.toLowerCase();
+  const seen = new Set();
+  return pokemons
+    .filter((p) => p.name.toLowerCase().includes(lower))
+    .filter((p) => !seen.has(p.name) && seen.add(p.name))
+    .slice(0, 25)
+    .map((p) => ({ name: p.name, value: p.name }));
+}
+
+function normalizeName(name) {
+  return name
+    .replace(/\s+/g, " ")
+    .replace(/:female_sign:| ♀️|♀️/g, "♀")
+    .replace(/:male_sign:| ♂️|♂️/g, "♂");
 }
 
 bot.on(Events.ClientReady, () => {
@@ -157,31 +110,20 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     );
   }
   if (interaction.isChatInputCommand() || interaction.isCommand()) {
-    switch (interaction.commandName) {
-      case "uebersetzen":
-      case "translate":
-        if (interaction.options.getBoolean("public") == true) {
-          await interaction.deferReply();
-        } else {
-          await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-        }
-        let name = interaction.options.getString("pokemon");
-        let target = interaction.options.getString("target") || "9"; // 9 = English
-        name = name
-          .replace("  ", " ")
-          .replace(":female_sign:", "♀️")
-          .replace(" ♀️", "♀")
-          .replace("♀️", "♀");
-        name = name
-          .replace("  ", " ")
-          .replace(":male_sign:", "♂️")
-          .replace(" ♂️", "♂")
-          .replace("♂️", "♂");
-        await interaction.editReply({
-          content: getResponse(name, target),
-        });
+    if (["uebersetzen", "translate"].includes(interaction.commandName)) {
+      await interaction.deferReply({
+        flags: interaction.options.getBoolean("public")
+          ? undefined
+          : MessageFlags.Ephemeral,
+      });
+      const name = normalizeName(interaction.options.getString("pokemon"));
+      const target = interaction.options.getString("target") || "9";
+      await interaction.editReply({
+        content: getResponse(name, target),
+      });
     }
   }
 });
 
+await getPokemonNames();
 bot.login(process.env.TOKEN);
