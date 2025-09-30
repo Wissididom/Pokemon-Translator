@@ -60,7 +60,10 @@ async function getPokemonNames() {
         "https://github.com/PokeAPI/pokeapi/raw/master/data/v2/csv/pokemon_species_names.csv",
       );
       if (!res.ok) throw new Error("Failed to fetch Pokémon names");
-      pokemons = csv2json.fieldDelimiter(',').supportQuotedField(true).csvStringToJson(await res.text());
+      pokemons = csv2json
+        .fieldDelimiter(",")
+        .supportQuotedField(true)
+        .csvStringToJson(await res.text());
     } catch (err) {
       console.error(`Error fetching Pokemon names: ${err}`);
     }
