@@ -13,7 +13,7 @@
   "author": "Wissididom",
   "license": "ISC",
   "dependencies": {
-    "convert-csv-to-json": "^3.10.0",
+    "convert-csv-to-json": "^3.11.0",
     "discord.js": "^14.23.2",
     "dotenv": "^17.2.3"
   },
