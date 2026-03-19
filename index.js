@@ -83,7 +83,10 @@ function getResponse(name, target = "9" /*English*/) {
       p.local_language_id == lang,
   );
   if (!translation) return baseMsg;
-  return (messages.found[lang] || messages.found[9])(translation.name);
+  return (
+    (messages.found[lang] || messages.found[9])(translation.name) +
+    `\n-# Please consider using the [new bot](<${process.env.NEW_BOT_URL}>) instead because I want to replace all my verified bots`
+  );
 }
 
 function getAutocompleteResponse(entered) {
@@ -105,6 +108,7 @@ function normalizeName(name) {
 
 bot.on(Events.ClientReady, () => {
   console.log(`Logged in as ${bot.user.tag}!`);
+  bot.user?.setPresence({ status: "invisible" });
 });
 bot.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isAutocomplete()) {
