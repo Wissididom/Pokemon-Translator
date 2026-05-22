@@ -1,7 +1,6 @@
-FROM node:lts-slim
-USER node
-WORKDIR /home/node/app
-COPY --chown=node:node . .
-RUN npm ci --omit=dev
+FROM ghcr.io/pnpm/pnpm:latest
+RUN pnpm runtime set node lts
+WORKDIR /app
+RUN pnpm ci --prod
 # EXPOSE 1337
-CMD [ "npm", "start" ]
+CMD [ "pnpm", "start" ]
