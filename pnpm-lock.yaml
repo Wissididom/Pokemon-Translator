@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       convert-csv-to-json:
-        specifier: ^4.96.0
-        version: 4.96.0
+        specifier: ^4.97.0
+        version: 4.97.0
       discord.js:
         specifier: ^14.28.0
         version: 14.28.0
@@ -78,8 +78,8 @@ packages:
     resolution: {integrity: sha512-Xfe6rpCTxSxfbswi/W/Pz7zp1WWSNn4A0eW4mLkQUewCrXXtMj31lCg+iQyTkh/CkusZSq9eDflu7tjEDXUY6g==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
-  convert-csv-to-json@4.96.0:
-    resolution: {integrity: sha512-94dSk0VKwaAdWnQZFmlAgJS6AGFxY4ma/ULwlrPuMM8ibSLIoaPW82545/lq4g9LoGEi3N3tMt8GkQJLD+OzmQ==}
+  convert-csv-to-json@4.97.0:
+    resolution: {integrity: sha512-EuuxWmKyYs6n4CdUZCs++fgUmn68oR8z8WRNRrLER1wFNE2YlFnjthuErd5KsY5Iqw57tP9DYf7NBFvtntmidA==}
 
   discord-api-types@0.38.50:
     resolution: {integrity: sha512-J2n/bpIETX3DQ6AJ7/0xbsTLmYiJQtO/LKcXKC1YDbB56OUwtDbdXOFE8Q4g8jVGHBR2VAy1+D4ngaIgkMNV9w==}
@@ -217,7 +217,7 @@ snapshots:
 
   '@vladfrangu/async_event_emitter@2.4.7': {}
 
-  convert-csv-to-json@4.96.0: {}
+  convert-csv-to-json@4.97.0: {}
 
   discord-api-types@0.38.50: {}
 
