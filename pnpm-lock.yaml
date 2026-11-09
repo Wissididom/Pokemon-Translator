@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       convert-csv-to-json:
-        specifier: ^4.97.0
-        version: 4.97.0
+        specifier: ^4.98.0
+        version: 4.98.0
       discord.js:
-        specifier: ^14.28.0
-        version: 14.28.0
+        specifier: ^14.28.1
+        version: 14.28.1
       dotenv:
         specifier: ^18.0.9
         version: 18.0.9
@@ -39,10 +39,6 @@ packages:
   '@discordjs/formatters@0.6.2':
     resolution: {integrity: sha512-y4UPwWhH6vChKRkGdMB4odasUbHOUwy7KL+OVwF86PvT6QVOwElx+TiI1/6kcmcEe+g5YRXJFiXSXUdabqZOvQ==}
     engines: {node: '>=16.11.0'}
-
-  '@discordjs/rest@2.6.2':
-    resolution: {integrity: sha512-c5HI3hJuRWWrnpyCZAUYfIUTAEv9weX4tE2UfDqtM3ztizdKE9RFEf3G5IWhPyO+kPldUDpGv02XJAQzdUTC9Q==}
-    engines: {node: '>=18'}
 
   '@discordjs/rest@2.6.3':
     resolution: {integrity: sha512-wvOylxNYJkwKjctS/Mn5GP1w9r3/rzyH+ThD1JlAca6zEdlHs8QWBBUQJpU5Q+W6DoIj/Ljh1IPlZs7hTU+UAg==}
@@ -78,14 +74,14 @@ packages:
     resolution: {integrity: sha512-Xfe6rpCTxSxfbswi/W/Pz7zp1WWSNn4A0eW4mLkQUewCrXXtMj31lCg+iQyTkh/CkusZSq9eDflu7tjEDXUY6g==}
     engines: {node: '>=v14.0.0', npm: '>=7.0.0'}
 
-  convert-csv-to-json@4.97.0:
-    resolution: {integrity: sha512-EuuxWmKyYs6n4CdUZCs++fgUmn68oR8z8WRNRrLER1wFNE2YlFnjthuErd5KsY5Iqw57tP9DYf7NBFvtntmidA==}
+  convert-csv-to-json@4.98.0:
+    resolution: {integrity: sha512-yBJhi7VZ/qgDuoknqkj9InRLIieajfbyxl7qaVz9UpeJApzFmUNmkofhdxtCMtps4UfbAkQTqb30Tf+ivFhZsg==}
 
   discord-api-types@0.38.50:
     resolution: {integrity: sha512-J2n/bpIETX3DQ6AJ7/0xbsTLmYiJQtO/LKcXKC1YDbB56OUwtDbdXOFE8Q4g8jVGHBR2VAy1+D4ngaIgkMNV9w==}
 
-  discord.js@14.28.0:
-    resolution: {integrity: sha512-l/mIllvqvWQDWqa8NPw7b2AU2tM9oPWiWR6Jk54DTNlUdyArXbi+Y0m0sLIUtQ9O0x+tyVpDMCG6K6Kf0yeAWQ==}
+  discord.js@14.28.1:
+    resolution: {integrity: sha512-Je5OcqgurnIUQK4vR+gQnmzOf/lNQsD6d/UkV8ZOj+bFa5zJXPyiGXlbywp2EagwshVT18y7YNQNSRd3FjYkDw==}
     engines: {node: '>=18'}
 
   dotenv@18.0.9:
@@ -155,18 +151,6 @@ snapshots:
     dependencies:
       discord-api-types: 0.38.50
 
-  '@discordjs/rest@2.6.2':
-    dependencies:
-      '@discordjs/collection': 2.1.1
-      '@discordjs/util': 1.2.0
-      '@sapphire/async-queue': 1.5.5
-      '@sapphire/snowflake': 3.5.5
-      '@vladfrangu/async_event_emitter': 2.4.7
-      discord-api-types: 0.38.50
-      magic-bytes.js: 1.13.0
-      tslib: 2.8.1
-      undici: 6.29.0
-
   '@discordjs/rest@2.6.3':
     dependencies:
       '@discordjs/collection': 2.1.1
@@ -186,7 +170,7 @@ snapshots:
   '@discordjs/ws@1.2.3':
     dependencies:
       '@discordjs/collection': 2.1.1
-      '@discordjs/rest': 2.6.2
+      '@discordjs/rest': 2.6.3
       '@discordjs/util': 1.2.0
       '@sapphire/async-queue': 1.5.5
       '@types/ws': 8.18.1
@@ -217,11 +201,11 @@ snapshots:
 
   '@vladfrangu/async_event_emitter@2.4.7': {}
 
-  convert-csv-to-json@4.97.0: {}
+  convert-csv-to-json@4.98.0: {}
 
   discord-api-types@0.38.50: {}
 
-  discord.js@14.28.0:
+  discord.js@14.28.1:
     dependencies:
       '@discordjs/builders': 1.15.0
       '@discordjs/collection': 1.5.3
